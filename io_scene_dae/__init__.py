@@ -70,23 +70,33 @@ class CE_OT_export_dae(bpy.types.Operator, ExportHelper):
                     "layers if that applies).",
         default=False,
         )
+        
     use_mesh_modifiers : BoolProperty(
         name="Apply Modifiers",
         description="Apply modifiers to mesh objects (on a copy!).",
         default=False,
         )
+
     use_exclude_armature_modifier : BoolProperty(
         name="Exclude Armature Modifier",
         description="Exclude the armature modifier when applying modifiers "
                       "(otherwise animation will be applied on top of the last pose)",
         default=True,
         )
+
+    use_ignore_armature_node : BoolProperty(
+        name="Ignore Armature Node",
+        description="Ignore the armature node entirely from export",
+        default=True,
+        )
+
     use_tangent_arrays : BoolProperty(
         name="Tangent Arrays",
         description="Export Tangent and Binormal arrays "
                     "(for normalmapping).",
         default=False,
         )
+
     use_triangles : BoolProperty(
         name="Triangulate",
         description="Export Triangles instead of Polygons.",
@@ -98,34 +108,40 @@ class CE_OT_export_dae(bpy.types.Operator, ExportHelper):
         description="Copy Images (create images/ subfolder)",
         default=False,
         )
+
     use_active_layers : BoolProperty(
         name="Active Layers",
         description="Export only objects on the active layers.",
         default=True,
         )
+
     use_exclude_ctrl_bones : BoolProperty(
         name="Exclude Control Bones",
         description=("Exclude skeleton bones with names beginning with 'ctrl' "
                      "or bones which are not marked as Deform bones."),
         default=True,
         )
+
     use_anim : BoolProperty(
         name="Export Animation",
         description="Export keyframe animation",
         default=False,
         )
+
     use_anim_action_all : BoolProperty(
         name="All Actions",
         description=("Export all actions for the first armature found "
                      "in separate DAE files"),
         default=False,
         )
+
     use_anim_skip_noexp : BoolProperty(
         name="Skip (-noexp) Actions",
         description="Skip exporting of actions whose name end in (-noexp)."
                     " Useful to skip control animations.",
         default=True,
         )
+
     use_anim_optimize : BoolProperty(
         name="Optimize Keyframes",
         description="Remove double keyframes",
