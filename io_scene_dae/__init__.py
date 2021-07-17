@@ -64,6 +64,15 @@ class CE_OT_export_dae(bpy.types.Operator, ExportHelper):
         default={"EMPTY", "CAMERA", "LAMP", "ARMATURE", "MESH", "CURVE"},
         )
 
+    up_axis: EnumProperty(
+        name="Up Axis",
+        description="The up axis of the file",
+        items=(('X_UP', "X_UP", "X Axis Up"),
+               ('Y_UP', "Y_UP", "Y Axis Up"),
+               ('Z_UP', "Z_UP", "Z Axis Up")),
+        default='Z_UP',
+        )
+
     use_export_selected : BoolProperty(
         name="Selected Objects",
         description="Export only selected objects (and visible in active "
