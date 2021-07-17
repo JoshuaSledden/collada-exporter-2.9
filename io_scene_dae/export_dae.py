@@ -1182,9 +1182,11 @@ class DaeExporter:
             self.writel(S_NODES, il, "</instance_geometry>")
 
     def export_armature_bone(self, bone, il, si):
+
         is_ctrl_bone = (
             self.config["use_exclude_ctrl_bones"] and
             (bone.name.startswith("ctrl") or bone.use_deform == False))
+
         if (bone.parent is None and is_ctrl_bone is True):
             self.operator.report(
                 {"WARNING"}, "Root bone cannot be a control bone:"+bone.name)
@@ -1240,6 +1242,8 @@ class DaeExporter:
         if (node.data is None):
             return
 
+        print("export_armature_node: {} - {}".format(node, il))
+
         self.skeletons.append(node)
 
         armature = node.data
@@ -1258,6 +1262,7 @@ class DaeExporter:
         for b in armature.bones:
             if (b.parent is not None):
                 continue
+
             self.export_armature_bone(b, il, self.skeleton_info[node])
 
         if (node.pose):
@@ -1551,14 +1556,19 @@ class DaeExporter:
         prev_node = bpy.context.view_layer.objects.active
         bpy.context.view_layer.objects.active = node
 
-        self.writel(
-            S_NODES, il, "<node id=\"{}\" name=\"{}\" type=\"NODE\">".format(
-                self.validate_id(node.name), node.name))
-        il += 1
+        ignored_node = self.config["use_ignore_armature_node"] and node.type == "ARMATURE"
 
-        self.writel(
-            S_NODES, il, "<matrix sid=\"transform\">{}</matrix>".format(
-                strmtx(node.matrix_local)))
+        if not ignored_node:
+            self.writel(
+                S_NODES, il, "<node id=\"{}\" name=\"{}\" type=\"NODE\">".format(
+                    self.validate_id(node.name), node.name))
+
+            il += 1
+
+            self.writel(
+                S_NODES, il, "<matrix sid=\"transform\">{}</matrix>".format(
+                    strmtx(node.matrix_local)))
+
         if (node.type == "MESH"):
             self.export_mesh_node(node, il)
         elif (node.type == "CURVE"):
@@ -1575,8 +1585,10 @@ class DaeExporter:
         for x in sorted(node.children, key=lambda x: x.name):
             self.export_node(x, il)
 
-        il -= 1
-        self.writel(S_NODES, il, "</node>")
+        if not ignored_node:
+            il -= 1
+            self.writel(S_NODES, il, "</node>")
+
         bpy.context.view_layer.objects.active = prev_node
 
     def is_node_valid(self, node):
