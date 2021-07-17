@@ -23,7 +23,7 @@ bl_info = {
     "name": "Better Collada Exporter",
     "author": "Juan Linietsky, artell",
     "version": (1, 10, 11),
-    "blender": (2, 80, 0),
+    "blender": (2, 90, 0),
     "api": 38691,
     "location": "File > Import-Export",
     "description": ("Export DAE Scenes. This plugin actually works better! "
